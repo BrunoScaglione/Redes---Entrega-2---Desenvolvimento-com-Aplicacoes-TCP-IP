@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+<meta charset="utf-8" />
+<title>WebSocket Chat</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script language="javascript" type="text/javascript">
+  var server = "ws://localhost:8765";
+  var output;
+
+  function init() {
+    output = document.getElementById("output");
+    testWebSocket();
+    fixsize();
+    $('#texto').focus(function() {
+        $(this).css('border','1px solid #5cb85c');
+    });
+    $('#texto').focus()
+    $("#envia").click(function() {              
+      doSend($('#texto').val());
+      $('#texto').val('');
+      $('#texto').focus()                           
+    });
+    $('#texto').keydown(function(event){
+        if(event.keyCode == 13) {
+          event.preventDefault();
+          $( "#envia" ).click();
+          return false;
+        }
+    });
+  }
+
+  function testWebSocket() {
+    websocket = new WebSocket(server);
+    websocket.onopen = function(evt) { onOpen(evt) };
+    websocket.onclose = function(evt) { onClose(evt) };
+    websocket.onmessage = function(evt) { onMessage(evt) };
+    websocket.onerror = function(evt) { onError(evt) };
+  }
+
+  function onOpen(evt) {
+    $('#envia').attr('disabled', false); 
+    $('#constatus').text("Você está online! birllll");
+    $("#principal").removeClass().addClass("panel panel-success");
+  }
+
+  function onClose(evt) {        
+    $('#envia').attr('disabled', true); 
+    $('#constatus').text("Você está offline...");
+    $("#principal").removeClass().addClass("panel panel-danger");      
+  }
+
+  function onMessage(evt) {
+    writeToScreen('<span style="color: green;">Recebido: ' + evt.data+'</span>');        
+  }
+
+  function onError(evt) {
+    writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+    $("#principal").removeClass().addClass("panel panel-danger");
+  }
+
+  function doSend(message) {
+    if (message) {
+      writeToScreen('<span style="color: black;">Enviado: '+ message + '</span>');
+      websocket.send(message);
+    }
+  }
+
+  function writeToScreen(message) {
+    var pre = document.createElement("p");
+    pre.style.wordWrap = "break-word";
+    pre.innerHTML = message; 
+    output.appendChild(pre);
+  }    
+
+  function fixsize() {   
+    content_height = $(window).height() - $('#input').height() - 150;
+    $('#output').height(content_height); 
+  }
+
+  $(window).unload(function() {
+    websocket.close();
+  });
+
+  $(window).resize(fixsize);
+
+  $(document).ready(init);
+</script>
+
+<body>
+ <div class="container-fluid">
+    <div id="principal" class="panel panel-info">
+        <div id="constatus" class="panel-heading">Chatzin</div>
+        <div id="rodape" style="color:white">Este Webchat apoia o Dinizismo</div>
+        <form role="form" class="panel-body">
+         <div class="form-group">
+         <div id="output" class="row-fluid panel-body" style="overflow-y: scroll;">
+            </div>
+            <div id="input">
+              <label for="textof">Enviar:</label>
+              <input type="text" class="form-control" id="texto">
+              <button id="envia" type="button" class="btn btn-success" disabled>Envia</button>
+          </div>
+      </div>
+  </form>
+</div>
+</div>
+</body>
+</html>
