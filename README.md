@@ -11,7 +11,6 @@ WebChat with Python backend
 
 ## Features
 [//]: # (Add the features of your project here:)
-This app features all the latest tools and practices in mobile development!
 
 - **Asyncio** —   a module that provides infrastructure for writing single-threaded "concurrent" code
 - **WebSockets** — a computer communications protocol, providing full-duplex communication channels over a single TCP connection
