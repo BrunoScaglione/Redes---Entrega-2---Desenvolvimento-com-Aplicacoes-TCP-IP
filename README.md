@@ -30,3 +30,7 @@ python server.py
 4. Set a name for your user with /nome yourname
 
 5. Type any message
+
+## Project details
+
+You can check [my report](https://github.com/BrunoScaglione/WebChat-PythonBackend/blob/main/BackdoorAttack_and_WebChat.pdf.pdf) (in Portuguese) for more details on the project.
